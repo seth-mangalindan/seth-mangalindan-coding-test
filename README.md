@@ -117,4 +117,4 @@ If automatically generating a new repository does not work, follow these steps i
 Q: The management requested a new feature where in the fictional e-commerce app must have a "featured products" section.
 How would you go about implementing this feature in the backend?
 
-A: _Put your answer here_
+A: I would implement this featured products section by first asking about the specifications/needs of the management, possible variables wherein a product would be featured would be an event where there is a limited edition product, a new arrival products, trending or bestsellers. Afterwards I would design the data model for products to have a "featured" attribute with a boolean datatype. I would create a criteria where a product would be featured. Possible criterias are being a limited edition product, being a bestseller etc. These would act as parameters to an endpoint where I will fetch the featured products. I would then connect the backend to the frontend featured products section.
