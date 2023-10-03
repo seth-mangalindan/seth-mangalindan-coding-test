@@ -3,50 +3,43 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\ProductRequest;
-
+use App\Services\ProductService;
+use App\Http\Traits\Caching;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    public function index()
+    use Caching;
+    public function __construct(protected ProductService $productService){}
+    public function index() : JsonResponse
     {
 
-        $cacheKey = 'products';
-
-        if (Cache::has($cacheKey)) {
-            $products = Cache::get($cacheKey);
-        } else {
-
-            $products = Product::all();
-
-
-            Cache::put($cacheKey, $products, 5);
-        }
-        return view('products', ['products' => $products]);
+        $response = $this->cache($this->productService->index());
+        
+        return response()->json($response, 200);
+        
     }
-    public function store(ProductRequest $request)
+    
+    public function store(Request $request)
     {
+     
+        $response = $this->productService->store($request->all());
 
-        $product = Product::create($request->all());
-
-
-        return new ProductResource($product);
+        return response()->json($response, 201);        
     }
-    public function update(Product $product, ProductRequest $request)
+    public function update(Request $request, $id)
     {
-        $product->update($request->all());
+        
+        $response = $this->productService->update($request->all(), $id);
 
-        return new ProductResource($product);
+        return response()->json($response, 200);
+        
     }
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        $product->delete();
+        $this->productService->destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
