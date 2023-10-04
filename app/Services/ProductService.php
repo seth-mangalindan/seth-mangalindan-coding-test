@@ -8,12 +8,13 @@ use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
-    
     public function __construct(private ProductRepository $productRepository){}
+    
     public function index() 
     {
         return $this->productRepository->index();
     }
+
     public function store($request = [])
     {
         $isValid = Validator::make($request, [
@@ -22,12 +23,14 @@ class ProductService
             'price' => 'required|numeric|decimal:0,2'
         ]);
 
-        if($isValid->fails()){ 
+        if($isValid->fails())
+        { 
             throw new ValidationException($isValid);
         }
 
          return $this->productRepository->store($request);
     }
+
     public function update($request = [], $id)
     {
         $isValid = Validator::make($request, [
@@ -36,12 +39,14 @@ class ProductService
             'price' => 'required|numeric|decimal:0,2'
         ]);
 
-        if($isValid->fails()){ 
+        if($isValid->fails())
+        { 
             throw new ValidationException($isValid);
         }
 
         return $this->productRepository->update($request, $id);
     }
+
     public function destroy($id)
     {
         $this->productRepository->destroy($id);

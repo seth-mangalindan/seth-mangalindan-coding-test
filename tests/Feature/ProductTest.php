@@ -87,5 +87,4 @@ class ProductTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseCount('products', 0);
     }
-
 }
